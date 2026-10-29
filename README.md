@@ -21,6 +21,14 @@ Seed-13 checkpoint, 64-image validation split, confidence threshold τ = 0.365:
 
 Monte Carlo Dropout was tested and found architecturally inapplicable to YOLOv8, since the network uses Batch Normalisation exclusively and contains no dropout layers. Full methodology, the seven-condition perturbation analysis, and failure-case breakdown are in the paper.
 
+## Reproducibility note
+
+Seed 13 — the checkpoint used for every result in the paper — was trained on Google Colab (A100 GPU). The original notebook that trained and compared all five seeds (7, 13, 42, 99, 777) to select seed 13 is no longer available.
+
+The multi-seed comparison cells in `uncertainty_aware_surgical_tool_detection.ipynb` are a later reconstruction of that process, run in a different environment, and their per-seed numbers do not match the original run or the values reported in the paper. This is flagged inline in the notebook as well.
+
+`best.pt` is the original seed-13 checkpoint from the Colab training run, not a checkpoint from the reconstruction. Everything from the point `best.pt` is loaded onward — evaluation, calibration, the perturbation sweep, bootstrap validation, all figures — reproduces the paper's reported results exactly, because it runs directly on that original checkpoint.
+
 ## Repository structure
 
 ```
@@ -45,10 +53,10 @@ The dataset is not redistributed in this repository. To reproduce the preprocess
    pip install -r requirements.txt
    ```
 2. Open `uncertainty_aware_surgical_tool_detection.ipynb`. Near the top, the `CANDIDATES` list holds a set of candidate local paths to the dataset's `Training` directory — replace these with the path to your own copy of OpenCAS/EndoVis.
-3. Run the notebook top to bottom. Training five seeds end-to-end on an A100 takes several hours; to skip straight to evaluation, load `best.pt` directly (the notebook already does this in the inference/evaluation cells) rather than retraining.
+3. To reproduce the paper's results, skip the multi-seed training cells (see the reproducibility note above) and load `best.pt` directly — the notebook already does this in the inference/evaluation cells (from Cell 19 onward).
 4. Evaluation, calibration, the seven-condition perturbation sweep, and all figures in `figures/` are regenerated from the loaded checkpoint.
 
-Training used seed 13, label smoothing λ = 0.1, 150 epochs, AdamW with lr₀ = 0.005 on a cosine decay schedule, batch size 32, image size 640×640. Full hyperparameters and the augmentation pipeline are listed in the notebook and in the paper's Methods section.
+The original training (seed 13, on Google Colab) used label smoothing λ = 0.1, 150 epochs, AdamW with lr₀ = 0.005 on a cosine decay schedule, batch size 32, image size 640×640. Full hyperparameters and the augmentation pipeline are listed in the notebook and in the paper's Methods section.
 
 ## Pretrained weights
 
