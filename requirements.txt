@@ -1,0 +1,11 @@
+ultralytics
+opencv-python-headless
+scikit-learn
+scipy
+matplotlib
+seaborn
+pandas
+tqdm
+pillow
+albumentations
+numpy
